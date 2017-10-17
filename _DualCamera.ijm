@@ -177,3 +177,7 @@ if (list.length==1) {
 		Dialog.show();
 		}
 }
+
+Dialog.create("DualCam");
+Dialog.addMessage("Done!");
+Dialog.show();
