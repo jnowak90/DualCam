@@ -18,7 +18,9 @@ Fiji Macro to automatically split and transform microscopy images with dualcam s
   b. If no, select a transformation matrix.
   
 2. Select the images for processing.
+
   a. If there is only one image in the folder, it will be processed automatically.
+  
   b. If there are multiple images, select all or just one image for processing.
   
 ### Requirements
