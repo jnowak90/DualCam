@@ -8,7 +8,7 @@ function listFiles(dir) {
 	filelist = newArray(0);
 	list = getFileList(dir);
     for (i=0; i<list.length; i++) {
-    	if (endsWith(list[i], "tif")) {
+    	if (endsWith(list[i], "tif") || endsWith(list[i], "TIF")) {
     		filelist = append(filelist,list[i]);
     	}
      }
@@ -144,7 +144,7 @@ if (list.length==1) {
 		//if only a specific file should be processed
 		waitForUser("Select image for processing");
 		filename = File.openDialog("Select a File");
-		if (endsWith(filename,"tif")) {			
+		if (endsWith(filename,"tif") || endsWith(list[i], "TIF")) {			
 			open(filename);
 			run("Stack to Images");
 			I = nImages();
