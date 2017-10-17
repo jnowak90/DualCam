@@ -1,6 +1,15 @@
 //*//*//*//
 //Macro to split and transform images from the dual camera setting
 //*//*//*//
+Dialog.create("Macro Output");
+items = newArray("yes","no");
+Dialog.addRadioButtonGroup("Do you want to use the silent mode (processed images are not shown)?",items,2,1,"no");
+Dialog.show();
+mode = Dialog.getRadioButton();
+
+if (mode == "yes"){
+	setBatchMode(true);
+}
 
 ///// Functions
 //List only tif files in folder
@@ -144,7 +153,7 @@ if (list.length==1) {
 		//if only a specific file should be processed
 		waitForUser("Select image for processing");
 		filename = File.openDialog("Select a File");
-		if (endsWith(filename,"tif") || endsWith(list[i], "TIF")) {			
+		if (endsWith(filename,"tif") || endsWith(filename, "TIF")) {			
 			open(filename);
 			run("Stack to Images");
 			I = nImages();
