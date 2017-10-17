@@ -27,4 +27,5 @@ Fiji Macro to automatically split and transform microscopy images with dualcam s
 
 - Store the calibration image in a separate folder from the images for processing.
 - Only tif files are supported.
+- TurboReg has to be installed in Fiji (http://bigwww.epfl.ch/thevenaz/turboreg/).
 - MultiStackReg has to be installed in Fiji (http://bradbusse.net/sciencedownloads.html).
