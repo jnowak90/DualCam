@@ -2,6 +2,7 @@
 //Macro to split and transform images from the dual camera setting
 //*//*//*//
 Dialog.create("Macro Output");
+Dialog.addMessage("Warning:\n To ensure that the macro works properly, file names with spaces \n or brackets are replaced by underscores.");
 items = newArray("yes","no");
 Dialog.addRadioButtonGroup("Do you want to use the silent mode (processed images are not shown)?",items,2,1,"no");
 Dialog.show();
@@ -88,6 +89,7 @@ else {
 //Select source directory for images to be processed
 waitForUser("Select Image Directory");
 dir = getDirectory("Select Image Directory");
+run("Fix Funny Filenames", "which="+dir);
 
 //If there is only one image in the folder, process it
 list=listFiles(dir); 
@@ -95,16 +97,18 @@ list=listFiles(dir);
 if (list.length==1) {
 	filename = list[0];			
 	open(filename);	
+	label = getTitle();
+	label = replace(label, ".TIF","");
 	run("Stack to Images");
 	I = nImages();
 	titles = getList("image.titles");
 	
 	for (i=0; i<I; i++) {		
 		selectWindow(titles[i]);
-		label = splitHalfes(titles[i]);
+		label_s = splitHalfes(titles[i]);
 	
 		//use MultiStackReg to align and transform images with transformation matrix
-		run("MultiStackReg", "stack_1=Left_"+label+" action_1=[Use as Reference] file_1=["+matrix+"] stack_2=Right_"+label+" action_2=[Load Transformation File] file_2=["+matrix+"] transformation=[Rigid Body]");
+		run("MultiStackReg", "stack_1=Left_"+label_s+" action_1=[Use as Reference] file_1=["+matrix+"] stack_2=Right_"+label_s+" action_2=[Load Transformation File] file_2=["+matrix+"] transformation=[Rigid Body]");
 	}
 	run("Images to Stack"," name=Left_ title=Left_ use");
 	saveAs("Tiff",dir+label+"_left.tif");
@@ -131,6 +135,8 @@ if (list.length==1) {
 		
 			filename = dir+list[i];			
 			open(filename);	
+			label = getTitle();
+			label = replace(label, ".TIF","");
 			print("Process image "+(i+1)+" of "+list.length);	
 			run("Stack to Images");
 			I = nImages();
@@ -138,10 +144,10 @@ if (list.length==1) {
 	
 			for (j=0; j<I; j++) {		
 				selectWindow(titles[j]);
-				label = splitHalfes(filename);
+				label_s = splitHalfes(filename);
 
 				//use MultiStackReg to align and transform images with transformation matrix
-				run("MultiStackReg", "stack_1=Left_"+label+" action_1=[Use as Reference] file_1=["+matrix+"] stack_2=Right_"+label+" action_2=[Load Transformation File] file_2=["+matrix+"] transformation=[Rigid Body]");
+				run("MultiStackReg", "stack_1=Left_"+label_s+" action_1=[Use as Reference] file_1=["+matrix+"] stack_2=Right_"+label_s+" action_2=[Load Transformation File] file_2=["+matrix+"] transformation=[Rigid Body]");
 				}
 			run("Images to Stack"," name=Left_ title=Left_ use");
 			saveAs("Tiff",dir+label+"_left.tif");
@@ -155,16 +161,18 @@ if (list.length==1) {
 		filename = File.openDialog("Select a File");
 		if (endsWith(filename,"tif") || endsWith(filename, "TIF")) {			
 			open(filename);
+			label = getTitle();
+			label = replace(label, ".TIF","");
 			run("Stack to Images");
 			I = nImages();
 			titles = getList("image.titles");
 	
 			for (i=0; i<I; i++) {		
 				selectWindow(titles[i]);
-				label = splitHalfes(filename);
+				label_s = splitHalfes(filename);
 
 				//use MultiStackReg to align and transform images with transformation matrix
-				run("MultiStackReg", "stack_1=Left_"+label+" action_1=[Use as Reference] file_1=["+matrix+"] stack_2=Right_"+label+" action_2=[Load Transformation File] file_2=["+matrix+"] transformation=[Rigid Body]");
+				run("MultiStackReg", "stack_1=Left_"+label_s+" action_1=[Use as Reference] file_1=["+matrix+"] stack_2=Right_"+label_s+" action_2=[Load Transformation File] file_2=["+matrix+"] transformation=[Rigid Body]");
 			}
 			run("Images to Stack"," name=Left_ title=Left_ use");
 			saveAs("Tiff",dir+label+"_left.tif");
