@@ -107,9 +107,9 @@ if (list.length==1) {
 		run("MultiStackReg", "stack_1=Left_"+label+" action_1=[Use as Reference] file_1=["+matrix+"] stack_2=Right_"+label+" action_2=[Load Transformation File] file_2=["+matrix+"] transformation=[Rigid Body]");
 	}
 	run("Images to Stack"," name=Left_ title=Left_ use");
-	saveAs("Tiff",dir+"Left_"+label+".tif");
+	saveAs("Tiff",dir+label+"_left.tif");
 	run("Images to Stack"," name=Right_ title=Right_ use");
-	saveAs("Tiff",dir+"Right_"+label+".tif");
+	saveAs("Tiff",dir+label+"_right.tif");
 	run("Close All");
 	
 }else {
@@ -144,9 +144,9 @@ if (list.length==1) {
 				run("MultiStackReg", "stack_1=Left_"+label+" action_1=[Use as Reference] file_1=["+matrix+"] stack_2=Right_"+label+" action_2=[Load Transformation File] file_2=["+matrix+"] transformation=[Rigid Body]");
 				}
 			run("Images to Stack"," name=Left_ title=Left_ use");
-			saveAs("Tiff",dir+"Left_"+label+".tif");
+			saveAs("Tiff",dir+label+"_left.tif");
 			run("Images to Stack"," name=Right_ title=Right_ use");
-			saveAs("Tiff",dir+"Right_"+label+".tif");
+			saveAs("Tiff",dir+label+"_right.tif");
 			run("Close All");
 		}
 	} else {
@@ -167,9 +167,9 @@ if (list.length==1) {
 				run("MultiStackReg", "stack_1=Left_"+label+" action_1=[Use as Reference] file_1=["+matrix+"] stack_2=Right_"+label+" action_2=[Load Transformation File] file_2=["+matrix+"] transformation=[Rigid Body]");
 			}
 			run("Images to Stack"," name=Left_ title=Left_ use");
-			saveAs("Tiff",dir+"Left_"+label+".tif");
+			saveAs("Tiff",dir+label+"_left.tif");
 			run("Images to Stack"," name=Right_ title=Right_ use");
-			saveAs("Tiff",dir+"Right_"+label+".tif");
+			saveAs("Tiff",dir+label+"_right.tif");
 			run("Close All");
 	} else {
 		Dialog.create("Error");
