@@ -185,6 +185,8 @@ if (list.length==1) {
 		Dialog.show();
 		}
 }
+selectWindow("Log");
+run("Close");
 
 Dialog.create("DualCam");
 Dialog.addMessage("Done!");
