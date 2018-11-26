@@ -38,6 +38,17 @@ function splitHalfes(image) {
 	run("Duplicate...","title=Right_"+label);
 	return label;
 }
+
+// add leading zeros to image number
+function pad(number,zeros) {
+	string = toString(number);
+	while (lengthOf(string) < zeros) {
+		string = "0" + string;
+	}
+	return string;
+}
+
+// split image and save to temporary directory
 function processImage(image) {
 	open(image);	
 	label = getTitle();
@@ -54,14 +65,17 @@ function processImage(image) {
 			title = label+".tif"; 
 		}
 		label_s = splitHalfes(title);
+		stringI = toString(I);
+		zeros = lengthOf(stringI)+1;
+		number_s = pad(i,zeros);
 		run("MultiStackReg", "stack_1=Left_"+label_s+" action_1=[Use as Reference] file_1=["+matrix+"] stack_2=Right_"+label_s+" action_2=[Load Transformation File] file_2=["+matrix+"] transformation=[Rigid Body]");
 		run("Images to Stack"," name=Left_ title=Left_ use");
-		saveAs("Tiff","/tmp/Left/"+label+"_"+i+"_left.tif");
+		saveAs("Tiff","/tmp/Left/"+label+"_"+number_s+"_left.tif");
 		run("Images to Stack"," name=Right_ title=Right_ use");
-		saveAs("Tiff","/tmp/Right/"+label+"_"+i+"_right.tif");
-		selectWindow(label+"_"+i+"_left.tif");
+		saveAs("Tiff","/tmp/Right/"+label+"_"+number_s+"_right.tif");
+		selectWindow(label+"_"+number_s+"_left.tif");
 		run("Close");
-		selectWindow(label+"_"+i+"_right.tif");
+		selectWindow(label+"_"+number_s+"_right.tif");
 		run("Close");
 		selectWindow(title);
 		run("Close");
