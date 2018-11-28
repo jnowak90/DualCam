@@ -49,8 +49,8 @@ function pad(number,zeros) {
 }
 
 // split image and save to temporary directory
-function processImage(image) {
-	open(image);	
+function processImage(image,dir) {
+	open(dir+image);	
 	label = getTitle();
 	label = replace(label, ".TIF","");
 	label = replace(label, ".tif","");
@@ -119,6 +119,7 @@ if (mode == "yes"){
 	setBatchMode(true);
 }
 
+//setOption("JFileChooser", true);
 //temporary folders for processed images
 File.makeDirectory("/tmp/Left/");
 File.makeDirectory("/tmp/Right/");
@@ -176,13 +177,13 @@ list=listFiles(dir);
 
 if (list.length==1) {
 	filename = list[0];			
-	label = processImage(filename);
+	label = processImage(filename,dir);
 	deleteTmpFiles(dir,label);
 }else {
 	// If there are several tif files in folder
 	//Select which images to process
 	Dialog.create("Images");
-	items2 = newArray("only selected images","all images");
+	items2 = newArray("only selected image","all images");
 	Dialog.addRadioButtonGroup("Which images do you want to process?",items2,2,1,"all images");
 	Dialog.show();
 
@@ -196,21 +197,24 @@ if (list.length==1) {
 		for (i=0; i<list.length; i++){
 		
 			filename = list[i];			
-			label = processImage(filename);
+			label = processImage(filename,dir);
 			deleteTmpFiles(dir,label);
 		}
 	} else {
 		//if only a specific file should be processed
 		waitForUser("Select image for processing");
-		filename = File.openDialog("Select a File");
+		filename = File.openDialog("Select File");
+
 		if (endsWith(filename,"tif") || endsWith(filename, "TIF")) {			
-			label = processImage(filename);
-			deleteTmpFiles(dir,label);
-	} else {
-		Dialog.create("Error");
-		Dialog.addMessage("The selected file is not a tif image.");
-		Dialog.show();
+				label = processImage(filename,dir);
+				deleteTmpFiles(dir,label);
+		} else {
+			Dialog.create("Error");
+			Dialog.addMessage("The selected file is not a tif image.");
+			Dialog.show();
 		}
+		}
+		
 }
 if (isOpen("Log")) {
 	selectWindow("Log");
