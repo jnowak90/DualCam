@@ -54,6 +54,7 @@ function processImage(image,dir) {
 	label = getTitle();
 	label = replace(label, ".TIF","");
 	label = replace(label, ".tif","");
+	run("8-bit");
 	I = nSlices();
 
 	for (i=0; i<I; i++) {
@@ -111,7 +112,7 @@ function deleteTmpFiles(dir,label) {
 Dialog.create("Macro Output");
 Dialog.addMessage("Warning:\n To ensure that the macro works properly, file names with spaces \n or brackets are replaced by underscores.");
 items = newArray("yes","no");
-Dialog.addRadioButtonGroup("Do you want to use the silent mode (processed images are not shown)?",items,2,1,"no");
+Dialog.addRadioButtonGroup("Do you want to use the silent mode (processed images are not shown)?",items,2,1,"yes");
 Dialog.show();
 mode = Dialog.getRadioButton();
 
@@ -199,7 +200,8 @@ if (list.length==1) {
 			filename = list[i];			
 			label = processImage(filename,dir);
 			deleteTmpFiles(dir,label);
-		}
+			run("Collect Garbage");
+		}	
 	} else {
 		//if only a specific file should be processed
 		waitForUser("Select image for processing");
