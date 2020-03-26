@@ -73,13 +73,13 @@ function processImage(image,dir) {
 		run("MultiStackReg", "stack_1=Left_"+label_s+" action_1=[Use as Reference] file_1=["+matrix+"] stack_2=Right_"+label_s+" action_2=[Load Transformation File] file_2=["+matrix+"] transformation=[Rigid Body]");
 		run("Images to Stack"," name=Left_ title=Left_ use");
 		if (startsWith(osSystem, "Windows")) {
-			saveAs("Tiff","\\tmp\\Left\\"+label+"_"+number_s+"_left.tif");
+			saveAs("Tiff",tmpDir + "Left\\"+label+"_"+number_s+"_left.tif");
 		} else {
 			saveAs("Tiff","/tmp/Left/"+label+"_"+number_s+"_left.tif");
 		}
 		run("Images to Stack"," name=Right_ title=Right_ use");
 		if (startsWith(osSystem, "Windows")) {
-			saveAs("Tiff","\\tmp\\Right\\"+label+"_"+number_s+"_right.tif");
+			saveAs("Tiff",tmpDir + "Right\\"+label+"_"+number_s+"_right.tif");
 		} else {
 			saveAs("Tiff","/tmp/Right/"+label+"_"+number_s+"_right.tif");
 		}
@@ -95,8 +95,8 @@ function processImage(image,dir) {
 
 function deleteTmpFiles(dir,label) {
 	if (startsWith(osSystem, "Windows")) {
-		list_left = listFiles("\\tmp\\Left\\");
-		list_right = listFiles("\\tmp\\Right\\");
+		list_left = listFiles(tmpDir + "Left\\");
+		list_right = listFiles(tmpDir + "Right\\");
 	} else {
 		list_left = listFiles("/tmp/Left/");
 		list_right = listFiles("/tmp/Right/");
@@ -105,8 +105,8 @@ function deleteTmpFiles(dir,label) {
 	for (j=0; j<list_left.length; j++) {
 		filename = list_left[j];
 		if (startsWith(osSystem, "Windows")) {
-			open("\\tmp\\Left\\"+filename);
-			ok = File.delete("\\tmp\\Left\\"+filename);
+			open(tmpDir + "Left\\"+filename);
+			ok = File.delete(tmpDir + "Left\\"+filename);
 		} else {
 			open("/tmp/Left/"+filename);
 			ok = File.delete("/tmp/Left/"+filename);
@@ -119,8 +119,8 @@ function deleteTmpFiles(dir,label) {
 	for (j=0; j<list_right.length; j++) {
 		filename = list_right[j];
 		if (startsWith(osSystem, "Windows")) {
-			open("\\tmp\\Right\\"+filename);
-			ok = File.delete("\\tmp\\Right\\"+filename);
+			open(tmpDir + "Right\\"+filename);
+			ok = File.delete(tmpDir + "Right\\"+filename);
 		} else {
 			open("/tmp/Right/"+filename);
 			ok = File.delete("/tmp/Right/"+filename);
@@ -147,8 +147,9 @@ if (mode == "yes"){
 //setOption("JFileChooser", true);
 //temporary folders for processed images
 if (startsWith(osSystem, "Windows")) {
-	File.makeDirectory("\\tmp\\Left\\");
-	File.makeDirectory("\\tmp\\Right\\");
+	tmpDir = getDirectory("temp");
+	File.makeDirectory(tmpDir + "Left\\");
+	File.makeDirectory(tmpDir + "Right\\");
 } else {
 	File.makeDirectory("/tmp/Left/");
 	File.makeDirectory("/tmp/Right/");		
@@ -252,8 +253,8 @@ if (isOpen("Log")) {
 	run("Close");
 }
 if (startsWith(osSystem, "Windows")) {
-	ok = File.delete("\\tmp\\Left\\");
-	ok = File.delete("\\tmp\\Right\\");
+	ok = File.delete(tmpDir + "Left\\");
+	ok = File.delete(tmpDir + "Right\\");
 } else {
 	ok = File.delete("/tmp/Left/");
 	ok = File.delete("/tmp/Right/");
