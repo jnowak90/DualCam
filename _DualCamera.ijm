@@ -51,26 +51,28 @@ function pad(number,zeros) {
 }
 
 // split image and save to temporary directory
-function processImage(image,dir) {
+function processImage(image, dir) {
 	open(dir + image);	
 	label = getTitle();
+	splitLabel = split(label, ".");
+	fileType = splitLabel[splitLabel.length - 1];
 	label = replace(label, ".TIF", "");
 	label = replace(label, ".tif", "");
 	I = nSlices();
 
 	for (i=0; i<I; i++) {
-		selectWindow(label + ".tif");
+		selectWindow(label + "." + fileType);
 		if (i < I - 1) {
 			run("Make Substack...", "delete slices=1");	
 			title = getTitle();
 		} else {
-			title = label+".tif"; 
+			title = label + "." + fileType; 
 		}
 		label_s = splitHalfes(title);
 		stringI = toString(I);
 		zeros = lengthOf(stringI) + 1;
 		number_s = pad(i, zeros);
-		run("MultiStackReg", "stack_1=Left_"+label_s+" action_1=[Use as Reference] file_1=["+matrix+"] stack_2=Right_"+label_s+" action_2=[Load Transformation File] file_2=["+matrix+"] transformation=[Rigid Body]");
+		run("MultiStackReg", "stack_1=Left_" + label_s + " action_1=[Use as Reference] file_1=[" + matrix + "] stack_2=Right_" + label_s + " action_2=[Load Transformation File] file_2=[" + matrix + "] transformation=[Rigid Body]");
 		run("Images to Stack"," name=Left_ title=Left_ use");
 		if (startsWith(osSystem, "Windows")) {
 			saveAs("Tiff", tmpDir + "Left\\" + label + "_" + number_s + "_left.tif");
