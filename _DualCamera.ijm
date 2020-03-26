@@ -5,6 +5,8 @@
 ////////// Functions //////////
 ///////////////////////////////
 //List only tif files in folder
+osSystem = getInfo("os.name");
+
 function listFiles(dir) {
 	filelist = newArray(0);
 	list = getFileList(dir);
@@ -54,7 +56,6 @@ function processImage(image,dir) {
 	label = getTitle();
 	label = replace(label, ".TIF","");
 	label = replace(label, ".tif","");
-	run("8-bit");
 	I = nSlices();
 
 	for (i=0; i<I; i++) {
@@ -85,13 +86,23 @@ function processImage(image,dir) {
 }
 
 function deleteTmpFiles(dir,label) {
-	list_left = listFiles("/tmp/Left/");
-	list_right = listFiles("/tmp/Right/");
+	if (startsWith(osSystem, "Windows")) {
+		list_left = listFiles("\\tmp\\Left\\");
+		list_right = listFiles("\\tmp\\Right\\");
+	} else {
+		list_left = listFiles("/tmp/Left/");
+		list_right = listFiles("/tmp/Right/");
+	}
 
 	for (j=0; j<list_left.length; j++) {
 		filename = list_left[j];
-		open("/tmp/Left/"+filename);
-		ok = File.delete("/tmp/Left/"+filename);
+		if (startsWith(osSystem, "Windows")) {
+			open("\\tmp\\Left\\"+filename);
+			ok = File.delete("\\tmp\\Left\\"+filename);
+		} else {
+			open("/tmp/Left/"+filename);
+			ok = File.delete("/tmp/Left/"+filename);
+		}
 	}
 	run("Images to Stack"," name=_left title=_left use");
 	saveAs("Tiff",dir+label+"_left.tif");
@@ -99,8 +110,13 @@ function deleteTmpFiles(dir,label) {
 
 	for (j=0; j<list_right.length; j++) {
 		filename = list_right[j];
-		open("/tmp/Right/"+filename);
-		ok = File.delete("/tmp/Right/"+filename);
+		if (startsWith(osSystem, "Windows")) {
+			open("\\tmp\\Right\\"+filename);
+			ok = File.delete("\\tmp\\Right\\"+filename);
+		} else {
+			open("/tmp/Right/"+filename);
+			ok = File.delete("/tmp/Right/"+filename);
+		}
 	}
 	run("Images to Stack"," name=_right title=_right use");
 	saveAs("Tiff",dir+label+"_right.tif");
@@ -112,7 +128,7 @@ function deleteTmpFiles(dir,label) {
 Dialog.create("Macro Output");
 Dialog.addMessage("Warning:\n To ensure that the macro works properly, file names with spaces \n or brackets are replaced by underscores.");
 items = newArray("yes","no");
-Dialog.addRadioButtonGroup("Do you want to use the silent mode (processed images are not shown)?",items,2,1,"yes");
+Dialog.addRadioButtonGroup("Do you want to use the silent mode (processed images are not shown)?",items,2,1,"no");
 Dialog.show();
 mode = Dialog.getRadioButton();
 
@@ -122,8 +138,14 @@ if (mode == "yes"){
 
 //setOption("JFileChooser", true);
 //temporary folders for processed images
-File.makeDirectory("/tmp/Left/");
-File.makeDirectory("/tmp/Right/");
+if (startsWith(osSystem, "Windows")) {
+	File.makeDirectory("\\tmp\\Left\\");
+	File.makeDirectory("\\tmp\\Right\\");
+} else {
+	File.makeDirectory("/tmp/Left/");
+	File.makeDirectory("/tmp/Right/");		
+}
+
 /////////////////////////////////
 ////////// Calibration //////////
 ////////////////////////////////
@@ -200,7 +222,6 @@ if (list.length==1) {
 			filename = list[i];			
 			label = processImage(filename,dir);
 			deleteTmpFiles(dir,label);
-			run("Collect Garbage");
 		}	
 	} else {
 		//if only a specific file should be processed
@@ -222,8 +243,13 @@ if (isOpen("Log")) {
 	selectWindow("Log");
 	run("Close");
 }
-ok = File.delete("/tmp/Left/");
-ok = File.delete("/tmp/Right/");
+if (startsWith(osSystem, "Windows")) {
+	ok = File.delete("\\tmp\\Left\\");
+	ok = File.delete("\\tmp\\Right\\");
+} else {
+	ok = File.delete("/tmp/Left/");
+	ok = File.delete("/tmp/Right/");
+}
 
 Dialog.create("DualCam");
 Dialog.addMessage("Done!");
