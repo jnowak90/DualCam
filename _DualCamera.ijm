@@ -72,9 +72,17 @@ function processImage(image,dir) {
 		number_s = pad(i,zeros);
 		run("MultiStackReg", "stack_1=Left_"+label_s+" action_1=[Use as Reference] file_1=["+matrix+"] stack_2=Right_"+label_s+" action_2=[Load Transformation File] file_2=["+matrix+"] transformation=[Rigid Body]");
 		run("Images to Stack"," name=Left_ title=Left_ use");
-		saveAs("Tiff","/tmp/Left/"+label+"_"+number_s+"_left.tif");
+		if (startsWith(osSystem, "Windows")) {
+			saveAs("Tiff","\\tmp\\Left\\"+label+"_"+number_s+"_left.tif");
+		} else {
+			saveAs("Tiff","/tmp/Left/"+label+"_"+number_s+"_left.tif");
+		}
 		run("Images to Stack"," name=Right_ title=Right_ use");
-		saveAs("Tiff","/tmp/Right/"+label+"_"+number_s+"_right.tif");
+		if (startsWith(osSystem, "Windows")) {
+			saveAs("Tiff","\\tmp\\Right\\"+label+"_"+number_s+"_right.tif");
+		} else {
+			saveAs("Tiff","/tmp/Right/"+label+"_"+number_s+"_right.tif");
+		}
 		selectWindow(label+"_"+number_s+"_left.tif");
 		run("Close");
 		selectWindow(label+"_"+number_s+"_right.tif");
